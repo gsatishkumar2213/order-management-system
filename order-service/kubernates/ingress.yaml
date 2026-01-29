@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: order-ingress
+  namespace: microservices
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: /api/orders/
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 8080
+          - path: /payments/
+            pathType: Prefix
+            backend:
+              service:
+                name: payment-service
+                port:
+                  number: 8081
+

@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-config
+data:
+  KAFKA_BROKER_ID: "1"
+  KAFKA_ZOOKEEPER_CONNECT: "zookeeper-service:2181"
+  KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-pod:29092,PLAINTEXT_HOST://localhost:9092"
+  KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+  KAFKA_INTER_BROKER_LISTENER_NAME: "PLAINTEXT"
+  KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+  KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+  KAFKA_NUM_PARTITIONS: "1"
+  KAFKA_DEFAULT_REPLICATION_FACTOR: "1"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: order-config
+data:
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  SERVER_PORT: "8080"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zookeeper-config
+data:
+  ZOOKEEPER_CLIENT_PORT: "2181"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: payment-config
+data:
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  SERVER_PORT: "8081"

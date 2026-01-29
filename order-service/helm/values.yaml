@@ -1,0 +1,17 @@
+namespace: microservices
+orderService:
+  replicas: 3
+  image: order-management-system-order-service:latest
+  port: 8080
+paymentService:
+  replicas: 3
+  image: order-management-system-payment-service:latest
+  port: 8081
+kafkaService:
+  replicas: 1
+  image: confluentinc/cp-kafka:7.5.0
+  port: 9092
+zookeeper:
+  replicas: 3
+  image: confluentinc/cp-zookeeper:7.5.0
+  port: 2181
