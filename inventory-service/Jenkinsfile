@@ -6,17 +6,17 @@ pipeline {
     stages {
         stage('Compile') {
             steps {
-                sh 'mvn clean compile'
+                sh 'cd inventory-service && mvn clean compile'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                sh 'cd inventory-service && mvn test'
             }
         }
         stage('Build') {
             steps {
-                sh 'mvn package'
+                sh 'cd inventory-service && mvn package'
             }
         }
     }
