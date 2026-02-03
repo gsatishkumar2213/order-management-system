@@ -32,17 +32,23 @@ public class PaymentProcessingServic {
 
     public Payment checkIfPaymentPresent(Payment payment) {
         log.info("Payment request has been recieved: " + payment.getOrderId());
-        if (payment == null) {
-            throw new InvalidinputException("Payment can not be null ");
-        } else {
+        try {
+            if (payment == null) {
+                throw new InvalidinputException("Payment can not be null");
+            }
+
             if (payment.getOrderId() == null
                     || payment.getAmount() <= 0
                     || (payment.getCustomerId() == null || payment.getCustomerId().isBlank())) {
-                throw new InvalidinputException("Invalid Request found: "
-                        + payment.toString()
-                );
+                throw new InvalidinputException("Invalid Request found: " + payment.toString());
             }
+            payment.setStatus("COMPLETED");
+            return this.savePaymentIfnotExist(payment);
+
+        } catch (Exception e) {
+            log.error("Payment processing failed: " + e.getMessage());
+            payment.setStatus("FAILED");
+            return this.savePaymentIfnotExist(payment);
         }
-        return this.savePaymentIfnotExist(payment);
     }
 }

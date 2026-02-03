@@ -6,7 +6,6 @@ import order.management.system.paymentprocessingservice.service.PaymentProcessin
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
@@ -16,17 +15,17 @@ import java.time.LocalDateTime;
 public class PaymentConsumer {
     private Logger log = LoggerFactory.getLogger(PaymentConsumer.class);
     private PaymentProcessingServic paymentProcessingService;
-    private KafkaTemplate<Long, OrderCreatedEvent> kafkaTemplate;
+    private PaymentProcessProducer paymentProcessProducer;
 
-    public PaymentConsumer(KafkaTemplate<Long, OrderCreatedEvent> kafkaTemplate,
-                           PaymentProcessingServic paymentProcessingService) {
-        this.kafkaTemplate = kafkaTemplate;
+
+    public PaymentConsumer(PaymentProcessingServic paymentProcessingService,
+                           PaymentProcessProducer paymentProcessProducer) {
         this.paymentProcessingService = paymentProcessingService;
+        this.paymentProcessProducer = paymentProcessProducer;
     }
 
-
     @KafkaListener(
-            topics = "orders",
+            topics = "order-created",
             groupId = "payment-group"
     )
     public void consumePayment(OrderCreatedEvent orderCreatedEvent,
@@ -39,7 +38,8 @@ public class PaymentConsumer {
                 "PENDING",
                 LocalDateTime.now());
         Payment result = paymentProcessingService.checkIfPaymentPresent(payment);
+        log.info("Payment processed with status: " + result.getStatus());
+        paymentProcessProducer.producePaymentProcessEvent(payment);
         ack.acknowledge();
-
     }
 }
