@@ -22,7 +22,7 @@ public class PaymentEventConsumer {
         this.paymentEventProducer = paymentEventProducer;
     }
 
-    @KafkaListener(topics = "order-events", groupId = "payment-service-group")
+    @KafkaListener(topics = "order-created", groupId = "payment-service-group")
     public void consumeOrderEvent(OrderCreatedEvent orderCreatedEvent) {
         System.out.println("===== LISTENER CALLED =====");
         logger.info("Consumed OrderCreatedEvent: {}", orderCreatedEvent);

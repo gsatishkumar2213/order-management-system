@@ -18,7 +18,7 @@ public class OrderEventProducer {
 
     public void publishOrderCreated(OrderCreatedEvent orderCreatedEvent) {
         logger.info("Publishing OrderCreatedEvent for orderId: {}", orderCreatedEvent.orderId());
-        kafkaTemplate.send("order-events", orderCreatedEvent.orderId().toString(),
+        kafkaTemplate.send("order-created", orderCreatedEvent.orderId().toString(),
                 orderCreatedEvent);
         logger.info("OrderCreatedEvent published successfully");
     }

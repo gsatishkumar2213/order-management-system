@@ -18,7 +18,7 @@ public class OrderEventConsumer {
         this.orderService = orderService;
     }
 
-    @KafkaListener(topics = "payment-events", groupId = "order-service-group")
+    @KafkaListener(topics = "payment-processing", groupId = "order-service-group")
     public void consumerPaymentProcessEvent(PaymentProcessedEvent paymentProcessedEvent) {
         logger.info("===== CONSUMED PaymentProcessedEvent =====");
         if (paymentProcessedEvent.status().equalsIgnoreCase(OrderStatus.SUCCESS)) {
